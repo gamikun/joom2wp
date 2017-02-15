@@ -115,7 +115,7 @@ for row in scursor:
     media_id = tcursor.lastrowid
 
     if catid in wp_cats:
-        the_cat_id,, = wp_cats[catid]
+        the_cat_id, _,  = wp_cats[catid]
     else:
         cat_slug, cat_title = cats[catid]
         the_cat_id = insert_category(cat_title, cat_slug)
