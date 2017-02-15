@@ -57,6 +57,8 @@ for cat in scursor:
     cid, alias, title = cat
     cats[cid] = (alias, title, )
 
+print(cats)
+
 """ K2 Items """
 query = """
     select id, title, alias, `fulltext`,
