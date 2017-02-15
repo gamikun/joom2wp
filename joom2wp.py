@@ -80,14 +80,14 @@ for row in scursor:
 
     tcursor.execute("""
         insert into {}posts (
-            ID, post_title, post_name, post_content,
+            post_title, post_name, post_content,
             post_excerpt, to_ping, pinged, post_content_filtered,
             post_type
         )
-        values (%s, %s, %s, %s, %s, '', '', '', %s)
+        values (%s, %s, %s, %s, '', '', '', %s)
     """.format(args.table_prefix[1]),
         (
-            theid, title,
+            title,
             slug[:200], content, 
             excerpt, args.post_type
         )
