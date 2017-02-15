@@ -38,7 +38,7 @@ tcursor = target.cursor()
 
 """ Wordpress categories """
 wp_cats = {}
-tcursor = scursor.execute("""
+tcursor.execute("""
     select slug, id, name 
     from {}terms
     where term_group = 0
