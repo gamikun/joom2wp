@@ -53,7 +53,7 @@ def insert_media(theid, url):
             %s, '', '', '', '', '', '',
             '', 'attachment', %s, 'image/jpeg'
         );
-        """,
+        """.format(args.table_prefix[1]),
         (theid, url, )
     )  
 
