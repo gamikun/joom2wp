@@ -39,7 +39,7 @@ tcursor = target.cursor()
 """ Wordpress categories """
 wp_cats = {}
 tcursor.execute("""
-    select slug, id, name 
+    select slug, term_id as id, name 
     from {}terms
     where term_group = 0
 """.format(args.table_prefix[1]))
