@@ -38,12 +38,12 @@ tcursor = target.cursor()
 
 """ Wordpress categories """
 wp_cats = {}
-scursor = scursor.execute("""
+tcursor = scursor.execute("""
     select slug, id, name 
     from wp_terms
     where term_group = 0
 """)
-for cat in scursor:
+for cat in tcursor:
     slug, cid, name = cat
     wp_cats[slug] = (cid, name, )
 
