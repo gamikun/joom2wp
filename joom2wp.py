@@ -49,7 +49,10 @@ for cat in tcursor:
 
 """ Joomla Categories list """
 cats = {}
-scursor.execute("select id, alias, title from categories")
+scursor.execute(
+    "select id, alias, title from {}categories"\
+        .format(source_prefix)
+)
 for cat in scursor:
     cid, alias, title = cat
     cats[cid] = (alias, title, )
