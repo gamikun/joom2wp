@@ -40,9 +40,9 @@ tcursor = target.cursor()
 wp_cats = {}
 tcursor = scursor.execute("""
     select slug, id, name 
-    from wp_terms
+    from {}terms
     where term_group = 0
-""")
+""".format(args.table_prefix[1]))
 for cat in tcursor:
     slug, cid, name = cat
     wp_cats[slug] = (cid, name, )
