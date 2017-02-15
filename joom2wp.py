@@ -36,11 +36,32 @@ images_path = '/var/www/the-emag/wp-content/uploads/migrated'
 scursor = source.cursor()
 tcursor = target.cursor()
 
+""" Wordpress categories """
+wp_cats = {}
+scursor = scursor.execute("""
+    select slug, id, name 
+    from wp_terms
+    where term_group = 0
+""")
+for cat in scursor:
+    slug, cid, name = cat
+    wp_cats[slug] = (cid, name, )
+
+""" Joomla Categories list """
+cats = {}
+scursor.execute("select id, alias, title from categories")
+for cat in scursor:
+    cid, alias, title = cat
+    cats[cid] = (alias, title, )
+
 """ K2 Items """
-scursor.execute("""
-    select id, title, alias, `fulltext`, introtext
-    from {}k2_items
-""".format(source_prefix))
+query = """
+    select id, title, alias, `fulltext`,
+           introtext, catid
+    from {}k2_items i
+    """
+preapred_query = query.format(source_prefix)
+scursor.execute(preapred_query)
 
 def insert_media(theid, url):
     tcursor.execute("""
@@ -57,8 +78,23 @@ def insert_media(theid, url):
         (theid, url, )
     )  
 
+def insert_category(name, slug):
+    tcursor.execute("""
+        insert into {}terms (
+            name, slug, term_group
+        )
+        values (
+            %s, %s, 0
+        )
+        """.format(args.table_prefix[1]), 
+        (name, slug,)
+    )
+    return tcursor.lastrowid
+
 for row in scursor:
-    theid, title, slug, content, excerpt = row
+    theid, title, slug, \
+        content, excerpt, \
+        catid = row
     print(theid)
 
     if args.joomla_url:
@@ -77,6 +113,13 @@ for row in scursor:
             insert_media(200000 + theid, destination_url)
 
     media_id = tcursor.lastrowid
+
+    if catid in wp_cats:
+        the_cat_id,, = wp_cats[catid]
+    else:
+        cat_slug, cat_title = cats[catid]
+        the_cat_id = insert_category(cat_title, cat_slug)
+        wp_cats[cat_slug] = (the_cat_id, cat_slug, )
 
     tcursor.execute("""
         insert into {}posts (
