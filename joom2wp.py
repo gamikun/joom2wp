@@ -42,7 +42,7 @@ scursor.execute("""
     from {}k2_items
 """.format(source_prefix))
 
-def insert_media(theid, url, postid):
+def insert_media(theid, url):
     tcursor.execute("""
         insert into {}posts (
             ID, post_title, post_name, post_content,
@@ -50,7 +50,8 @@ def insert_media(theid, url, postid):
             post_type, guid, post_mime_type
         )
         values (
-            %s, '', '', '', '', '', '', 'attachment', %s, 'image/jpeg'
+            %s, '', '', '', '', '', '',
+            '', 'attachment', %s, 'image/jpeg'
         );
         """,
         (theid, url, )
@@ -59,24 +60,7 @@ def insert_media(theid, url, postid):
 for row in scursor:
     theid, title, slug, content, excerpt = row
     print(theid)
-    tcursor.execute("""
-        insert into {}posts (
-            ID, post_title, post_name, post_content,
-            post_excerpt, to_ping, pinged, post_content_filtered,
-            post_type
-        )
-        values (%s, %s, %s, %s, %s, '', '', '', %s);
-        insert into {}postmeta (
-            post_id, meta_key, meta_id
-        )
-        values ()
-    """.format(args.table_prefix[1], args.table_prefix[1])
-        (1000000 + theid, 'NOOOO_' + title,
-         slug[:200], content, 
-         excerpt, args.post_type
-         )
-    )
-    
+
     if args.joomla_url:
         md5id = md5("Image" + str(theid)).hexdigest()
         filename = md5id + '.jpg'
@@ -90,10 +74,36 @@ for row in scursor:
                     fp.write(response.content)
                 insert_media(200000 + theid, destination_url)
         else:
-            print(destination_url)
             insert_media(200000 + theid, destination_url)
 
-            
+    media_id = tcursor.lastrowid
+
+    tcursor.execute("""
+        insert into {}posts (
+            ID, post_title, post_name, post_content,
+            post_excerpt, to_ping, pinged, post_content_filtered,
+            post_type
+        )
+        values (%s, %s, %s, %s, %s, '', '', '', %s)
+    """.format(args.table_prefix[1]),
+        (
+            theid, title,
+            slug[:200], content, 
+            excerpt, args.post_type
+        )
+    )
+
+    post_id = tcursor.lastrowid
+
+    if post_id and media_id:
+        tcursor.execute("""
+            insert into {}postmeta (
+                post_id, meta_key, meta_value
+            )
+            values (%s, '_thumbnail_id', %s)
+            """.format(args.table_prefix[1]),
+            (post_id, media_id, )
+        )       
 
 #target.commit()
 
