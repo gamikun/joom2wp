@@ -200,7 +200,7 @@ else:
         where post_type = 'post_colombia';
     """)
 
-if args.do_commit:
+if args.commit:
     target.commit()
 
 
