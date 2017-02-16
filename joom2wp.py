@@ -14,13 +14,20 @@ parser.add_argument('--db-host', help='Source database',
 parser.add_argument('--db-user', help='Database user',
                     dest='db_user', nargs=2,
                     default=['root', 'root'])
-parser.add_argument('--db-name', help='Database name', required=True, dest='db_name', nargs=2)
-parser.add_argument('--db-pwd', help='Password', required=True, dest='db_password', nargs=2)
-parser.add_argument('--db-prefix', help='Tables prefixes', required=True, dest='table_prefix', nargs=2, default=('jo_', 'wp_'))
-parser.add_argument('-p', help='Post type to be inserted', dest='post_type', default='post')
+parser.add_argument('--db-name', help='Database name',
+                    required=True, dest='db_name', nargs=2)
+parser.add_argument('--db-pwd', help='Password', required=True,
+                    dest='db_password', nargs=2)
+parser.add_argument('--db-prefix', help='Tables prefixes',
+                    required=True, dest='table_prefix',
+                    nargs=2, default=('jo_', 'wp_'))
+parser.add_argument('-p', help='Post type to be inserted',
+                    dest='post_type', default='post')
 parser.add_argument('-u', help='Joomla URL', dest='joomla_url', default=None)
-parser.add_argument('-d', help='Destination Base URL', required=True, dest='destination_url')
-parser.add_argument('-c', help='Commit changes to database.', action='store_const', const=True, dest='commit')
+parser.add_argument('-d', help='Destination Base URL',
+                    required=True, dest='destination_url')
+parser.add_argument('-c', help='Commit changes to database.',
+                    action='store_const', const=True, dest='commit')
 parser.add_argument('--revert', help='Do a database revert with the inserted posts',
                     action='store_const', const=True, dest='do_revert')
 parser.add_argument('-t', help='Replace taxonomy',
@@ -146,7 +153,11 @@ if not args.do_revert:
             md5id = md5("Image" + str(theid)).hexdigest()
             filename = md5id + '.jpg'
             image_url = '{}/media/k2/items/cache/{}_XL.jpg'.format(args.joomla_url, md5id)
-            destination_url = os.path.join(args.destination_url, 'wp-content/uploads/migrated', filename)
+            destination_url = os.path.join(
+                args.destination_url,
+                'wp-content/uploads/migrated',
+                filename
+            )
             image_path = '{}/{}'.format(images_path, filename)
             if not os.path.isfile(image_path):
                 response = requests.get(image_url)
