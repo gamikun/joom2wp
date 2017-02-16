@@ -104,10 +104,10 @@ def insert_category(name, slug):
     cat_id = tcursor.lastrowid
     tcursor.execute("""
         insert into {0}term_taxonomy (
-            term_id, taxonomy
+            term_id, taxonomy, description
         )
         values (
-            %s, 'category'
+            %s, 'category', ''
         )
         """.format(args.table_prefix[1]),
         (cat_id,)
