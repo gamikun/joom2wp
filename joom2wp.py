@@ -168,7 +168,7 @@ for row in scursor:
 
     if post_id and the_tax_id:
         tcursor.execute("""
-            insert into {}term_relationship (
+            insert into {}term_relationships (
                 object_id, term_taxonomy_id, tem_order
             )
             values (
