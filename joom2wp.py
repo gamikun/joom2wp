@@ -82,7 +82,7 @@ if not args.do_revert:
     """ K2 Items """
     query = """
         select i.id, i.title, i.alias, i.`fulltext`,
-               i.introtext, i.catid, c.alias
+               i.introtext, i.catid, c.alias, i.created
         from {0}k2_items as i
         inner join {0}k2_categories as c
             on i.catid = c.id
@@ -135,7 +135,7 @@ if not args.do_revert:
     for row in scursor:
         theid, title, slug, \
             content, excerpt, \
-            catid, catslug = row
+            catid, catslug, created = row
         print(theid)
 
         if args.joomla_url:
@@ -169,14 +169,15 @@ if not args.do_revert:
             insert into {}posts (
                 post_title, post_name, post_content,
                 post_excerpt, to_ping, pinged, post_content_filtered,
-                post_type
+                post_type, post_date
             )
-            values (%s, %s, %s, %s, '', '', '', %s)
+            values (%s, %s, %s, %s, '', '', '', %s, %s)
         """.format(args.table_prefix[1]),
             (
                 title,
                 slug[:200], content, 
-                excerpt, args.post_type
+                excerpt, args.post_type,
+                created,
             )
         )
 
