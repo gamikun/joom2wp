@@ -196,6 +196,8 @@ else:
         delete from wp_posts
         where post_type = 'attachment'
         and guid like '%migrated%';
+    """)
+    tcursor.execute("""
         delete from wp_posts
         where post_type = 'post_colombia';
     """)
