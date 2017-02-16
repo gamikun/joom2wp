@@ -19,6 +19,12 @@ parser.add_argument('-d', help='Destination Base URL', required=True, dest='dest
 parser.add_argument('-c', help='Commit changes to database.', action='store_const', const=True, dest='commit')
 parser.add_argument('--revert', help='Do a database revert with the inserted posts',
                     action='store_const', const=True, dest='do_revert')
+parser.add_argument('-t', help='Replace taxonomy',
+                    dest='category_taxonomy',
+                    default=None,
+                    type=str
+                    )
+
 args = parser.parse_args()
 
 source_prefix = args.table_prefix[0]
@@ -41,15 +47,20 @@ tcursor = target.cursor()
 
 """ Wordpress categories """
 wp_cats = {}
+cat_taxonomy = args.category_taxonomy \
+            if args.category_taxonomy \
+            else 'category'
 tcursor.execute("""
     select t.slug, t.term_id as id, t.name,
            tx.term_taxonomy_id as tx_id
     from {0}terms as t
     inner join {0}term_taxonomy as tx
         on t.term_id = tx.term_id
-        and tx.taxonomy = 'category'
+        and tx.taxonomy = %s
     where term_group = 0
-""".format(args.table_prefix[1]))
+    """.format(args.table_prefix[1]),
+    (cat_taxonomy, )
+)
 
 for cat in tcursor:
     slug, cid, name, tx_id = cat
@@ -112,10 +123,10 @@ if not args.do_revert:
                 term_id, taxonomy, description
             )
             values (
-                %s, 'category', ''
+                %s, %s, ''
             )
             """.format(args.table_prefix[1]),
-            (cat_id,)
+            (cat_id, cat_taxonomy, )
         )
         taxonomy_id = tcursor.lastrowid
 
@@ -202,10 +213,6 @@ else:
     tcursor.execute("""
         delete from wp_posts
         where post_type = 'post_colombia';
-    """)
-    tcursor.execute("""
-        delete from wp_terms
-        where name = 'analisis-de-mercado';
     """)
 
 if args.commit:
