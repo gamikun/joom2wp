@@ -70,9 +70,11 @@ if not args.do_revert:
 
     """ K2 Items """
     query = """
-        select id, title, alias, `fulltext`,
-               introtext, catid
-        from {}k2_items i
+        select i.id, i.title, i.alias, i.`fulltext`,
+               i.introtext, i.catid, c.alias
+        from {0}k2_items as i
+        inner join {0}k2_categories as as c
+            on i.catid = c.id
         """
     preapred_query = query.format(source_prefix)
     scursor.execute(preapred_query)
@@ -122,7 +124,7 @@ if not args.do_revert:
     for row in scursor:
         theid, title, slug, \
             content, excerpt, \
-            catid = row
+            catid, catslug = row
         print(theid)
 
         if args.joomla_url:
@@ -142,8 +144,8 @@ if not args.do_revert:
 
         media_id = tcursor.lastrowid
 
-        if catid in wp_cats:
-            the_cat_id, _, the_tax_id  = wp_cats[catid]
+        if catslug in wp_cats:
+            the_cat_id, _, the_tax_id  = wp_cats[catslug]
         elif catid in cats:
             cat_slug, cat_title = cats[catid]
             the_cat_id, the_tax_id = insert_category(cat_title, cat_slug)
