@@ -203,6 +203,10 @@ else:
         delete from wp_posts
         where post_type = 'post_colombia';
     """)
+    tcursor.execute("""
+        delete from wp_terms
+        where name = 'análisis-de-mercado';
+    """)
 
 if args.commit:
     target.commit()
