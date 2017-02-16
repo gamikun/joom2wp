@@ -16,7 +16,7 @@ parser.add_argument('--db-prefix', help='Tables prefixes', required=True, dest='
 parser.add_argument('-p', help='Post type to be inserted', dest='post_type', default='post')
 parser.add_argument('-u', help='Joomla URL', dest='joomla_url', default=None)
 parser.add_argument('-d', help='Destination Base URL', required=True, dest='destination_url')
-parser.add_argument('-c', help='Commit changes to database.', action='store_cont', const=True, dest='commit')
+parser.add_argument('-c', help='Commit changes to database.', action='store_const', const=True, dest='commit')
 args = parser.parse_args()
 
 source_prefix = args.table_prefix[0]
