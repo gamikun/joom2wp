@@ -205,7 +205,7 @@ else:
     """)
     tcursor.execute("""
         delete from wp_terms
-        where name = 'análisis-de-mercado';
+        where name = 'analisis-de-mercado';
     """)
 
 if args.commit:
