@@ -121,7 +121,7 @@ for row in scursor:
 
     if catid in wp_cats:
         the_cat_id, _,  = wp_cats[catid]
-    else:
+    elif catid in cats:
         cat_slug, cat_title = cats[catid]
         the_cat_id = insert_category(cat_title, cat_slug)
         wp_cats[cat_slug] = (the_cat_id, cat_slug, )
