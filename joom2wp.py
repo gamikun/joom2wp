@@ -11,7 +11,9 @@ parser = ArgumentParser()
 parser.add_argument('--db-host', help='Source database',
                     dest='db_host', nargs=2,
                     default=['localhost', 'localhost'])
-parser.add_argument('--db-user', help='database user', required=True, dest='db_user', nargs=2)
+parser.add_argument('--db-user', help='Database user',
+                    dest='db_user', nargs=2,
+                    default=['root', 'root'])
 parser.add_argument('--db-name', help='Database name', required=True, dest='db_name', nargs=2)
 parser.add_argument('--db-pwd', help='Password', required=True, dest='db_password', nargs=2)
 parser.add_argument('--db-prefix', help='Tables prefixes', required=True, dest='table_prefix', nargs=2, default=('jo_', 'wp_'))
