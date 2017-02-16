@@ -198,7 +198,8 @@ if not args.do_revert:
 
         post_id = tcursor.lastrowid
 
-        if post_id and the_tax_id:
+        if post_id and the_tax_slug:
+            print("yes")
             tcursor.execute("""
                 insert into {}term_relationships (
                     object_id, term_taxonomy_id, term_order
