@@ -56,7 +56,7 @@ for cat in tcursor:
 """ Joomla Categories list """
 cats = {}
 scursor.execute(
-    "select id, alias, title from {}categories"\
+    "select id, alias, name from {}k2_categories"\
         .format(source_prefix)
 )
 for cat in scursor:
