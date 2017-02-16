@@ -39,13 +39,18 @@ tcursor = target.cursor()
 """ Wordpress categories """
 wp_cats = {}
 tcursor.execute("""
-    select slug, term_id as id, name 
-    from {}terms
+    select t.slug, t.term_id as id, t.name,
+           tx.term_taxonomy_id as tx_id
+    from {0}terms as t
+    inner join {0}term_taxonomy as tx
+        on t.term_id = tx.term_id
+        and tx.taxonomy = 'category'
     where term_group = 0
 """.format(args.table_prefix[1]))
+
 for cat in tcursor:
-    slug, cid, name = cat
-    wp_cats[slug] = (cid, name, )
+    slug, cid, name, tx_id = cat
+    wp_cats[slug] = (cid, name, tx_id, )
 
 """ Joomla Categories list """
 cats = {}
@@ -81,7 +86,8 @@ def insert_media(theid, url):
         );
         """.format(args.table_prefix[1]),
         (theid, url, )
-    )  
+    )
+
 
 def insert_category(name, slug):
     tcursor.execute("""
@@ -90,11 +96,24 @@ def insert_category(name, slug):
         )
         values (
             %s, %s, 0
-        )
+        );
         """.format(args.table_prefix[1]), 
         (name, slug,)
     )
-    return tcursor.lastrowid
+    cat_id = tcursor.lastrowid
+    tcursor.execute("""
+        insert into {0}term_taxonomy (
+            term_id, taxonomy
+        )
+        values (
+            %s, 'category'
+        )
+        """.format(args.table_prefix[1]),
+        (cat_id,)
+    )
+    taxonomy_id = tcursor.lastrowid
+
+    return (cat_id, taxonomy_id, )
 
 for row in scursor:
     theid, title, slug, \
@@ -120,11 +139,14 @@ for row in scursor:
     media_id = tcursor.lastrowid
 
     if catid in wp_cats:
-        the_cat_id, _,  = wp_cats[catid]
+        the_cat_id, _, the_tax_id  = wp_cats[catid]
     elif catid in cats:
         cat_slug, cat_title = cats[catid]
-        the_cat_id = insert_category(cat_title, cat_slug)
-        wp_cats[cat_slug] = (the_cat_id, cat_slug, )
+        the_cat_id, the_tax_id = insert_category(cat_title, cat_slug)
+        wp_cats[cat_slug] = (the_cat_id, cat_slug, the_tax_id, )
+    else:
+        the_tax_id = None
+        the_cat_id = None
 
     tcursor.execute("""
         insert into {}posts (
@@ -143,6 +165,18 @@ for row in scursor:
 
     post_id = tcursor.lastrowid
 
+    if post_id and the_tax_id:
+        tcursor.execute("""
+            insert into {}term_relationship (
+                object_id, term_taxonomy_id, tem_order
+            )
+            values (
+                %s, %s, 0
+            )
+            """.format(args.table_prefix[1]),
+            (post_id, the_tax_id, )
+        )
+
     if post_id and media_id:
         tcursor.execute("""
             insert into {}postmeta (
@@ -156,3 +190,4 @@ for row in scursor:
 #target.commit()
 
 
+    
