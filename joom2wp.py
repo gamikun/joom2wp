@@ -73,7 +73,7 @@ if not args.do_revert:
         select i.id, i.title, i.alias, i.`fulltext`,
                i.introtext, i.catid, c.alias
         from {0}k2_items as i
-        inner join {0}k2_categories as as c
+        inner join {0}k2_categories as c
             on i.catid = c.id
         """
     preapred_query = query.format(source_prefix)
