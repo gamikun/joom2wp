@@ -111,7 +111,7 @@ if not args.do_revert:
                 post_modified, post_modified_gmt
             )
             values (
-                %s, --ID
+                %s, -- ID
                 null, -- post title
                 '', -- post_name
                 '', -- post_content
@@ -119,7 +119,7 @@ if not args.do_revert:
                 '', -- to_ping
                 '', -- pinged
                 '', -- post_content_filtered
-                'attachment'm -- post_type,
+                'attachment', -- post_type,
                 %s, -- guid
                 'image/jpeg', -- post_mime_type
                 'inherit', -- post_status
