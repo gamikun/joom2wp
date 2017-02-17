@@ -119,7 +119,7 @@ if not args.do_revert:
                 '', -- to_ping
                 '', -- pinged
                 '', -- post_content_filtered
-                'attachment' -- post_type,
+                'attachment'm -- post_type,
                 %s, -- guid
                 'image/jpeg', -- post_mime_type
                 'inherit', -- post_status
