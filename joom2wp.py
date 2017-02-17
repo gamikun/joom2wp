@@ -229,7 +229,7 @@ if not args.do_revert:
         if post_id and media_id:
             tcursor.execute("""
                 update {}postmeta
-                set post_paret = %s
+                set post_parent = %s
                 where meta_id = %s
                 """.format(args.table_prefix[1]),
 
