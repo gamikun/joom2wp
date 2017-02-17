@@ -112,7 +112,7 @@ if not args.do_revert:
             )
             values (
                 %s, -- ID
-                null, -- post title
+                'image', -- post title
                 '', -- post_name
                 '', -- post_content
                 '', -- pot_excerpt
