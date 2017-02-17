@@ -3,6 +3,7 @@
 from MySQLdb import connect
 from hashlib import md5
 from argparse import ArgumentParser
+from datetime import datetime
 import requests
 import os
 
@@ -106,14 +107,28 @@ if not args.do_revert:
             insert into {}posts (
                 ID, post_title, post_name, post_content,
                 post_excerpt, to_ping, pinged, post_content_filtered,
-                post_type, guid, post_mime_type
+                post_type, guid, post_mime_type, post_status,
+                post_modified, post_modified_gmt
             )
             values (
-                %s, '', '', '', '', '', '',
-                '', 'attachment', %s, 'image/jpeg'
+                %s, --ID
+                null, -- post title
+                '', -- post_name
+                '', -- post_content
+                '', -- pot_excerpt
+                '', -- to_ping
+                '', -- pinged
+                '', -- post_content_filtered
+                'attachment' -- post_type,
+                %s, -- guid
+                'image/jpeg', -- post_mime_type
+                'inherit', -- post_status
+                %s,
+                %s
+
             );
             """.format(args.table_prefix[1]),
-            (theid, url, )
+            (theid, url, datetime.now(), datetime.utcnow(), )
         )
 
 
@@ -212,6 +227,14 @@ if not args.do_revert:
             )
 
         if post_id and media_id:
+            tcursor.execute("""
+                update {}postmeta
+                set post_paret = %s
+                where id = %s
+                """.format(args.table_prefix[1]),
+
+                (post_id, media_id, )
+            )
             tcursor.execute("""
                 insert into {}postmeta (
                     post_id, meta_key, meta_value
