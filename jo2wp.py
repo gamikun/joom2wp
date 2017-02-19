@@ -108,7 +108,7 @@ if not args.do_revert:
     def insert_category(name, slug):
         term_id = int(subprocess.call([
             'wp', 'term', 'create',
-            cat_taxonomy,
+            cat_taxonomy, name,
             '--description="{}"'.format(name.replace('"', r'\"')),
             '--slug="{}"'.format(slug.replace('"', r'\"')),
             '--porcelain'
