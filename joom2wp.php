@@ -84,7 +84,7 @@ class MigrateCommand extends \WP_CLI_Command {
 				'post_type'    => $postType,
 				'post_name'    => utf8_encode(substr($row->alias, 0, 200)),
 				'post_date'    => $row->created,
-				'post_category'=> [$catID]*/
+				'post_category'=> [$catID]
 			]);
 
 			var_dump($catID);
