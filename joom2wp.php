@@ -75,6 +75,11 @@ class MigrateCommand extends \WP_CLI_Command {
                 on i.created_by = u.id
         ");
 
+        if (!$result) {
+            var_dump($mysql->error);
+            WP_CLI::halt(1);
+        }
+
         $mediaUtil = new \Media_Command;
 
         while ($row = $result->fetch_object()) {
