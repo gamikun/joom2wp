@@ -89,7 +89,7 @@ if not args.do_revert:
         inner join {0}k2_categories as c
             on i.catid = c.id
         """
-    preapred_query = query.format(source_prefix)
+    preapred_query = query.format(args.table_prefix)
     scursor.execute(preapred_query)
 
     def insert_media(theid, url, post_id=None):
