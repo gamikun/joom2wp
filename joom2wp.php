@@ -13,6 +13,8 @@ class MigrateCommand extends \WP_CLI_Command {
 
 	public function migrate($args=[], $assoc_args=[], $verbose=true) {
 
+		global $wpdb;
+
 		$allArgs = wp_parse_args(
 			$assoc_args,
 			[
@@ -88,8 +90,7 @@ class MigrateCommand extends \WP_CLI_Command {
 				'post_category'=> [$catID]*/
 			], true);
 
-			var_dump(mysqli_error());
-			var_dump($postID);
+			$wpdb->show_errors();
 
 			$md5ID = md5($row->id);
 			$imagenURL = "{$joomlaURL}/media/k2/items/cache/{$md5ID}_XL.jpg";
