@@ -131,7 +131,7 @@ if not args.do_revert:
             the_cat_id = None
 
         delta = created - datetime.fromtimestamp(0)
-        timestmap = int(dela.total_seconds())
+        timestmap = int(delta.total_seconds())
 
         post_id = int(subprocess.check_output([
             'wp', 'post', 'create',
