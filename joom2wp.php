@@ -29,10 +29,7 @@ class MigrateCommand extends \WP_CLI_Command {
 		);
 
 		$categories = get_categories([
-			'taxonomy' => $assoc_args['taxonomy'],
-			'fields'   => ['slug', 'term_id',
-						   'name', 'term_taxonomy_id'
-						   ]
+			'taxonomy' => $assoc_args['taxonomy']
 		]);
 
 		// WORDPRESS CATEGORIES
@@ -57,12 +54,12 @@ class MigrateCommand extends \WP_CLI_Command {
 
 		// JOOMLA K2
 		$result = $mysql->query("
-	        select i.id, i.title, i.alias,
-	        	   i.`fulltext`, i.introtext,
-	        	   i.catid, c.alias, i.created
-	        from {$tablePrefix}k2_items as i
-	        inner join {tablePrefix}k2_categories as c
-	            on i.catid = c.id
+	        select i.id, i.title, i.alias, 
+	        	   i.`fulltext`, i.introtext, 
+	        	   i.catid, c.alias, i.created 
+	        from {$tablePrefix}k2_items as i 
+	        inner join {tablePrefix}k2_categories as c 
+	            on i.catid = c.id 
 		");
 
 		while ($row = $result->fetch_object()) {
