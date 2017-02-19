@@ -51,7 +51,6 @@ source = connect(host=args.db_host,
 images_path = '/var/www/the-emag/wp-content/uploads/migrated'
 
 scursor = source.cursor()
-tcursor = target.cursor()
 
 """ Wordpress categories """
 wp_cats = {}
@@ -92,35 +91,18 @@ if not args.do_revert:
     preapred_query = query.format(source_prefix)
     scursor.execute(preapred_query)
 
-    def insert_media(theid, url):
-        tcursor.execute("""
-            insert into {}posts (
-                ID, post_title, post_name, post_content,
-                post_excerpt, to_ping, pinged, post_content_filtered,
-                post_type, guid, post_mime_type, post_status,
-                post_modified, post_modified_gmt
-            )
-            values (
-                %s, -- ID
-                'image', -- post title
-                '', -- post_name
-                '', -- post_content
-                '', -- pot_excerpt
-                '', -- to_ping
-                '', -- pinged
-                '', -- post_content_filtered
-                'attachment', -- post_type,
-                %s, -- guid
-                'image/jpeg', -- post_mime_type
-                'inherit', -- post_status
-                %s,
-                %s
-
-            );
-            """.format(args.table_prefix[1]),
-            (theid, url, datetime.now(), datetime.utcnow(), )
-        )
-
+    def insert_media(theid, url, post_id=None):
+        try:
+            subprocess.check_call([
+                'wp', 'media', 'import', url,
+                '--post_mime_type="image/jpeg"',
+                '--post_type="attachment"',
+                '--featured_image',
+                '--post_id={}'.format(post_id)
+            ])
+        except Exception as ex:
+            print(ex)
+            raise
 
     def insert_category(name, slug):
         term_id = int(subprocess.call([
@@ -137,28 +119,6 @@ if not args.do_revert:
         theid, title, slug, \
             content, excerpt, \
             catid, catslug, created = row
-        print(theid)
-
-        if args.joomla_url:
-            md5id = md5("Image" + str(theid)).hexdigest()
-            filename = md5id + '.jpg'
-            image_url = '{}/media/k2/items/cache/{}_XL.jpg'.format(args.joomla_url, md5id)
-            destination_url = os.path.join(
-                args.destination_url,
-                'wp-content/uploads/migrated',
-                filename
-            )
-            image_path = '{}/{}'.format(images_path, filename)
-            if not os.path.isfile(image_path):
-                response = requests.get(image_url)
-                if response.status_code == 200:
-                    with open(image_path, 'wb') as fp:
-                        fp.write(response.content)
-                    insert_media(200000 + theid, destination_url)
-            else:
-                insert_media(200000 + theid, destination_url)
-
-        media_id = tcursor.lastrowid
 
         if catslug in wp_cats:
             the_cat_id, _, the_tax_id  = wp_cats[catslug]
@@ -180,6 +140,12 @@ if not args.do_revert:
             '--post_date', created,
             '--porcelain'
         ]))
+
+        md5id = md5("Image" + str(theid)).hexdigest()
+        filename = md5id + '.jpg'
+        image_url = '{}/media/k2/items/cache/{}_XL.jpg'.format(args.joomla_url, md5id)
+
+
 
         if post_id and the_tax_id:
             tcursor.execute("""
@@ -222,8 +188,6 @@ else:
         where post_type = 'post_colombia';
     """)
 
-if args.commit:
-    target.commit()
 
 
     
