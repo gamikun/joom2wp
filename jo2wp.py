@@ -17,12 +17,12 @@ parser.add_argument('--db-user', help='Database user',
                     dest='db_user', nargs=2,
                     default=['root', 'root'])
 parser.add_argument('--db-name', help='Database name',
-                    required=True, dest='db_name', nargs=2)
+                    required=True, dest='db_name')
 parser.add_argument('--db-pwd', help='Password', required=True,
-                    dest='db_password', nargs=2)
+                    dest='db_password')
 parser.add_argument('--db-prefix', help='Tables prefixes',
                     required=True, dest='table_prefix',
-                    nargs=2, default=('jo_', 'wp_'))
+                    default=('jo_', 'wp_'))
 parser.add_argument('-p', help='Post type to be inserted',
                     dest='post_type', default='post')
 parser.add_argument('-u', help='Joomla URL', dest='joomla_url', default=None)
