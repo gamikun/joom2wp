@@ -136,11 +136,11 @@ if not args.do_revert:
 
         post_id = subprocess.check_output([
             'wp', 'post', 'create',
-            '--post_title={}'.format(title),
-            '--post_content={}'.format(content),
-            '--post_excerpt={}'.format(excerpt),
-            '--post_type={}'.format(args.post_type),
-            '--post_name={}'.format(slug[:200]),
+            '--post_title={}'.format(title.decode('utf8')),
+            #'--post_content={}'.format(content),
+            #'--post_excerpt={}'.format(excerpt),
+            #'--post_type={}'.format(args.post_type),
+            #'--post_name={}'.format(slug[:200]),
             '--post_date={:%Y-%m-%d %H:%M:%S}'.format(created),
             '--porcelain' 
         ])
