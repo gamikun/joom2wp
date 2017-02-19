@@ -109,8 +109,8 @@ if not args.do_revert:
         term_id = int(subprocess.call([
             'wp', 'term', 'create',
             cat_taxonomy,
-            '--description="{}"'.format(name.replace('"', '\"')),
-            '--slug="{}"'.format(slug.replace('"', '\"')),
+            '--description="{}"'.format(name.replace('"', '\\"')),
+            '--slug="{}"'.format(slug.replace('"', '\\"')),
             '--porcelain'
         ]))
 
@@ -132,12 +132,12 @@ if not args.do_revert:
 
         post_id = int(subprocess.check_output([
             'wp', 'post', 'create',
-            '--post_title', title,
-            '--post_name', slug[:200],
-            '--post_content', content,
-            '--post_excerpt', excerpt,
-            '--post_type', args.post_type,
-            '--post_date', created,
+            '--post_title={}'.format(title.replace('"', '\\"')),
+            '--post_name={}'.format(slug[:200].replace('"', '\\"')),
+            '--post_content={}'.format(content.replace('"', '\\"')),
+            '--post_excerpt={}'.format(excerpt),
+            '--post_type={}'.format(args.post_type),
+            '--post_date={:%Y:%m:%d %H:%M:%S}'.format(created),
             '--porcelain'
         ]))
 
