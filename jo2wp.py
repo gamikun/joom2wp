@@ -145,7 +145,9 @@ if not args.do_revert:
             '--porcelain' 
         ], shell=True)
 
-        sys.exit(0)
+        print(post_id)
+
+        sys.exit()
 
         md5id = md5("Image" + str(theid)).hexdigest()
         filename = md5id + '.jpg'
