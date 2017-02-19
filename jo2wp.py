@@ -140,7 +140,7 @@ if not args.do_revert:
             '--post_content="{}"'.format(content.replace('"', r'\"')),
             '--post_excerpt="{}"'.format(excerpt),
             '--post_type="{}"'.format(args.post_type),
-            '--post_date="{}"'.format(timestmap),
+            '--post_date="{:%Y-%m-%d}"'.format(created),
             '--porcelain'
         ]))
 
