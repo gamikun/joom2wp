@@ -88,8 +88,6 @@ class MigrateCommand extends \WP_CLI_Command {
 
 			var_dump($postID);
 
-			var_dump(mysqli_error())
-
 			$md5ID = md5($row->id);
 			$imagenURL = "{$joomlaURL}/media/k2/items/cache/{$md5ID}_XL.jpg";
 
