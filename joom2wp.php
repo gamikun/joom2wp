@@ -2,7 +2,9 @@
 
 namespace edesarrollos\joom2wp;
 
+define( 'WP_DEBUG', true );
 define( 'WP_DEBUG_LOG', true );
+define('WP_DEBUG_DISPLAY', true);
 
 use WP_CLI;
 use WP_CLI\Utils;
