@@ -150,7 +150,7 @@ if not args.do_revert:
                 args.post_type,
                 created
             )
-        ], shell=True))
+        , shell=True))
 
         md5id = md5("Image" + str(theid)).hexdigest()
         filename = md5id + '.jpg'
