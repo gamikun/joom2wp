@@ -96,8 +96,6 @@ class MigrateCommand extends \WP_CLI_Command {
 			
 			WP_CLI::log("Trying to import {$imagenURL}");
 
-			var_dump(parse_url($imagenURL));
-
 			$mediaID = $mediaUtil->import([$imagenURL], [
 				'post_id' => $postID,
 				'featured_image' => true
