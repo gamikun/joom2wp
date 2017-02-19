@@ -58,7 +58,7 @@ class MigrateCommand extends \WP_CLI_Command {
 	        	   i.`fulltext`, i.introtext, 
 	        	   i.catid, c.alias, i.created 
 	        from {$tablePrefix}k2_items as i 
-	        inner join {tablePrefix}k2_categories as c 
+	        inner join {$tablePrefix}k2_categories as c 
 	            on i.catid = c.id 
 		");
 
