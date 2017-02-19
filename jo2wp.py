@@ -72,7 +72,7 @@ for cat in csv.reader(StringIO.StringIO(raw_cats)):
 cats = {}
 scursor.execute(
     "select id, alias, name from {}k2_categories"\
-        .format(args.source_prefix)
+        .format(args.table_prefix)
 )
 for cat in scursor:
     cid, alias, title = cat
