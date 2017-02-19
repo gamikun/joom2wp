@@ -76,7 +76,6 @@ class MigrateCommand extends \WP_CLI_Command {
         ");
 
         if (!$result) {
-            var_dump($mysql->error);
             WP_CLI::halt(1);
         }
 
@@ -84,8 +83,6 @@ class MigrateCommand extends \WP_CLI_Command {
 
         while ($row = $result->fetch_object()) {
             $catID = wp_create_category($row->catname);
-
-            var_dump($authorID);
 
             $postParams = [
                 'post_title'   => utf8_encode($row->title),
@@ -115,6 +112,8 @@ class MigrateCommand extends \WP_CLI_Command {
                 }
 
                 $postParams['post_author'] = $authorID;
+
+                var_dump($postParams);
             }
 
             $postID = wp_insert_post($postParams);
