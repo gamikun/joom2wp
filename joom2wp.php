@@ -88,19 +88,17 @@ class MigrateCommand extends \WP_CLI_Command {
 
 			if ($postID) {
 				WP_CLI::log("Imported post {$postID}");
+
+				$md5ID = md5("Image" . $row->id);
+				$imagenURL = "{$joomlaURL}/media/k2/items/cache/{$md5ID}_XL.jpg";
+
+				$mediaUtil->import([$imagenURL], [
+					'post_id' => $postID,
+					'featured_image' => true
+				]);
 			} else {
 				WP_CLI::log("Couldn't import post.");
 			}
-
-			$md5ID = md5("Image" . $row->id);
-			$imagenURL = "{$joomlaURL}/media/k2/items/cache/{$md5ID}_XL.jpg";
-			
-			WP_CLI::log("Trying to import {$imagenURL}");
-
-			$mediaID = $mediaUtil->import([$imagenURL], [
-				'post_id' => $postID,
-				'featured_image' => true
-			]);
 		}
 	}
 
