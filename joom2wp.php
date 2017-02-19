@@ -65,7 +65,7 @@ class MigrateCommand extends \WP_CLI_Command {
                    i.`fulltext`, i.introtext, 
                    i.catid, c.alias, i.created,
                    c.name as catname,
-                   u.username, u.userID,
+                   u.username, u.id as userID,
                    u.email, u.name as userFullName,
                    u.registerDate
             from {$tablePrefix}k2_items as i 
