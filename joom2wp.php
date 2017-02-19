@@ -32,7 +32,7 @@ class MigrateCommand extends \WP_CLI_Command {
 			'taxonomy' => $assoc_args['taxonomy'],
 			'fields'   => ['slug', 'term_id',
 						   'name', 'term_taxonomy_id'
-						   ];
+						   ]
 		]);
 
 		// WORDPRESS CATEGORIES
