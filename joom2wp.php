@@ -69,7 +69,9 @@ class MigrateCommand extends \WP_CLI_Command {
 
 		while ($row = $result->fetch_object()) {
 			$md5ID = md5($row->id);
+
 			$imagenURL = "{$joomlaURL}/media/k2/items/cache/{$md5ID}_XL.jpg";
+
 			$postID = wp_insert_post([
 				'post_title'   => $row->title,
 				'post_content' => $row->fulltext,
@@ -78,9 +80,12 @@ class MigrateCommand extends \WP_CLI_Command {
 				'post_name'    => substr($row->alias, 0, 200),
 				'post_date'    => $row->created
 			]);
-			
-			$mediaUtil->import([$imagenURL], [
-				'post_id' => $postID
+
+			echo 'fuck' . $postID;
+
+			$mediaID = $mediaUtil->import([$imagenURL], [
+				'post_id' => $postID,
+				'featured_image' => true
 			]);
 		}
 	}
