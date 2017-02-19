@@ -134,7 +134,7 @@ if not args.do_revert:
         delta = created - datetime.fromtimestamp(0)
         timestmap = int(delta.total_seconds())
 
-        post_id = int(subprocess.check_output([
+        post_id = subprocess.check_output([
             'wp', 'post', 'create',
             '--post_title={}'.format(title),
             '--post_content={}'.format(content),
@@ -143,7 +143,7 @@ if not args.do_revert:
             '--post_name={}'.format(slug[:200]),
             '--post_date={:%Y-%m-%d %H:%M:%S}'.format(created),
             '--porcelain' 
-        ], shell=True))
+        ], shell=True)
 
         sys.exit(0)
 
