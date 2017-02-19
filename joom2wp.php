@@ -77,6 +77,7 @@ class MigrateCommand extends \WP_CLI_Command {
 						'cat_name' => $cat->name,
 						'taxonomy' => $taxonomy
 					], true);
+					var_dump($catID);
 					echo "Inserted category: {$catID}\n";
 				}
 			} else {
