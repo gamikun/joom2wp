@@ -7,18 +7,15 @@ use WP_CLI;
 class MigrateCommand extends \WP_CLI_Command {
 
 	public function migrate($args=[], $assoc_args=[], $verbose=true) {
-		$this->process_args(
-			array(
-				0 => '', // .json map file
-			),
-			$args,
-			array(
+
+		$this->assoc_args = wp_parse_args(
+			$assoc_args,
+			[
 				'db_host'  => 'localhost',
 				'db_user'  => 'root',
 				'post_type'=> 'post',
 				'taxonomy' => 'category'
-			),
-			$assoc_args
+			]
 		);
 
 		$mysql = mysqli_connect(
