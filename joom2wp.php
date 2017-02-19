@@ -65,13 +65,13 @@ class MigrateCommand extends \WP_CLI_Command {
                    i.`fulltext`, i.introtext, 
                    i.catid, c.alias, i.created,
                    c.name as catname,
-                   u.username, u.id as userID,
+                   u.username,
                    c.email, u.name as userFullName,
                    u.registerDate
             from {$tablePrefix}k2_items as i 
             inner join {$tablePrefix}k2_categories as c 
                 on i.catid = c.id
-            left join {$tablePrefix}_users as u
+            left join {$tablePrefix}users as u
                 on i.created_by = u.id
         ");
 
