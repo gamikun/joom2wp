@@ -85,9 +85,9 @@ class MigrateCommand extends \WP_CLI_Command {
 				'post_name'    => substr($row->alias, 0, 200),
 				'post_date'    => $row->created,
 				'post_category'=> [$catID]*/
-			], true);
+			]);
 
-			
+			var_dump($catID);
 
 			$md5ID = md5($row->id);
 			$imagenURL = "{$joomlaURL}/media/k2/items/cache/{$md5ID}_XL.jpg";
