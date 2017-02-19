@@ -130,6 +130,9 @@ if not args.do_revert:
         else:
             the_cat_id = None
 
+        delta = created - datetime.fromtimestamp(0)
+        timestmap = int(dela.total_seconds())
+
         post_id = int(subprocess.check_output([
             'wp', 'post', 'create',
             '--post_title="{}"'.format(title.replace('"', r'\"')),
@@ -137,7 +140,7 @@ if not args.do_revert:
             '--post_content="{}"'.format(content.replace('"', r'\"')),
             '--post_excerpt="{}"'.format(excerpt),
             '--post_type="{}"'.format(args.post_type),
-            '--post_date="{}"'.format((created - datetime.fromtimestamp(0)).total_seconds()),
+            '--post_date="{}"'.format(timestmap),
             '--porcelain'
         ]))
 
