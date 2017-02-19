@@ -69,9 +69,20 @@ class MigrateCommand extends \WP_CLI_Command {
 		$mediaUtil = new \Media_Command;
 
 		while ($row = $result->fetch_object()) {
-			if (isset($wp_cats[$row->alias])) {
-				
+			if (!isset($wp_cats[$row->alias])) {
+				if (isset($cats[$row->catid])) {
+					$cat = $cats[$row->catid];
+					$catID = wp_insert_category([
+						'category_nicename' => $cat->alias,
+						'cat_name' => $cat->name,
+						'taxonomy' => $taxonomy
+					]);
+				}
+			} else {
+				$catID = $wp_cats[$row->alias]->term_id;
 			}
+
+			var_dump($row);
 
 			$postID = wp_insert_post([
 				'post_title'   => $row->title,
@@ -79,7 +90,8 @@ class MigrateCommand extends \WP_CLI_Command {
 				'post_excerpt' => $row->introtext,
 				'post_type'    => $postType,
 				'post_name'    => substr($row->alias, 0, 200),
-				'post_date'    => $row->created
+				'post_date'    => $row->created,
+				'post_category'=> [$row->alias]
 			]);
 
 			echo 'fuck' . $postID;
