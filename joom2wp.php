@@ -91,7 +91,7 @@ class MigrateCommand extends \WP_CLI_Command {
 				WP_CLI::log("Couldn't import post.");
 			}
 
-			$md5ID = md5($row->id);
+			$md5ID = md5("Image" . $row->id);
 			$imagenURL = "{$joomlaURL}/media/k2/items/cache/{$md5ID}_XL.jpg";
 			
 			WP_CLI::log("Trying to import {$imagenURL}");
