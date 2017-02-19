@@ -76,7 +76,7 @@ class MigrateCommand extends \WP_CLI_Command {
 						'category_nicename' => $cat->alias,
 						'cat_name' => $cat->name,
 						'taxonomy' => $taxonomy
-					]);
+					], true);
 					echo "Inserted category: {$catID}\n";
 				}
 			} else {
@@ -93,7 +93,7 @@ class MigrateCommand extends \WP_CLI_Command {
 				'post_name'    => substr($row->alias, 0, 200),
 				'post_date'    => $row->created,
 				'post_category'=> [$row->alias]
-			]);
+			], true);
 
 			$md5ID = md5($row->id);
 			$imagenURL = "{$joomlaURL}/media/k2/items/cache/{$md5ID}_XL.jpg";
