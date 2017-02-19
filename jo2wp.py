@@ -9,6 +9,7 @@ import requests
 import os
 import StringIO
 import csv
+import sys
 
 
 parser = ArgumentParser()
@@ -143,6 +144,8 @@ if not args.do_revert:
             '--post_date={:%Y-%m-%d %H:%M:%S}'.format(created),
             '--porcelain' 
         ], shell=True))
+
+        sys.exit(0)
 
         md5id = md5("Image" + str(theid)).hexdigest()
         filename = md5id + '.jpg'
