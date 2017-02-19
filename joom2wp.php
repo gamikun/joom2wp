@@ -98,7 +98,7 @@ class MigrateCommand extends \WP_CLI_Command {
 						'featured_image' => true,
 						'porcelain'
 					]);
-				} catch {
+				} catch (Exception $ex) {
 					WP_CLI::warning("Couldn't import {$postID} media.");
 				}
 				
