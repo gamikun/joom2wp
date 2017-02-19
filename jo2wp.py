@@ -135,13 +135,13 @@ if not args.do_revert:
 
         post_id = int(subprocess.check_output([
             'wp', 'post', 'create',
-            '--post_title="{}"'.format(title.replace('"', r'\"')),
-            '--post_content="{}"'.format(content.replace('"', r'\"')),
-            '--post_excerpt="{}"'.format(excerpt.replace('"', r'\"')),
-            '--post_type="{}"'.format(args.post_type),
-            '--post_name="{}"'.format(slug[:200].replace('"', r'\"')),
-            '--post_date="{:%Y-%m-%d %H:%M:%S}"'.format(created),
-            '--porcelain'
+            '--post_title={}'.format(title.replace('"', r'\"')),
+            '--post_content={}'.format(content.replace('"', r'\"')),
+            '--post_excerpt={}'.format(excerpt.replace('"', r'\"')),
+            '--post_type={}'.format(args.post_type),
+            '--post_name={}'.format(slug[:200].replace('"', r'\"')),
+            '--post_date={:%Y-%m-%d %H:%M:%S}'.format(created),
+            '--porcelain' 
         ], shell=True))
 
         md5id = md5("Image" + str(theid)).hexdigest()
