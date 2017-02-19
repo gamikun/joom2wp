@@ -143,7 +143,7 @@ if not args.do_revert:
             #'--post_name={}'.format(slug[:200]),
             '--post_date={:%Y-%m-%d %H:%M:%S}'.format(created),
             '--porcelain' 
-        ], shell)
+        ], shell=True)
 
         print(post_id)
 
