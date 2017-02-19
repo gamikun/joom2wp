@@ -141,7 +141,7 @@ if not args.do_revert:
             +   ' --porcelain')
             .format(
                 title.replace('"', r'\"'),
-                content.replace('"', r'\"'),
+                content.replace('"', '\\\\"'),
                 excerpt,
                 args.post_type,
                 slug[:200].replace('"', r'\"'),
