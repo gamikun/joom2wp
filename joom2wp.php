@@ -39,7 +39,7 @@ class MigrateCommand extends \WP_CLI_Command {
 
 		$wp_cats = [];
 
-		foreach ($cat in $categories) {
+		foreach ($categories as $cat) {
 			$wp_cats[$cat->term_id] = $cat;
 		}
 
