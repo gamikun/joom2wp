@@ -90,7 +90,7 @@ class MigrateCommand extends \WP_CLI_Command {
 
             $postParams = [
                 'post_title'   => utf8_encode($row->title),
-                'post_content' => $content,
+                'post_content' => utf8_encode($content),
                 'post_excerpt' => utf8_encode($row->introtext),
                 'post_type'    => $postType,
                 'post_name'    => utf8_encode(substr($row->alias, 0, 200)),
