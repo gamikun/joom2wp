@@ -79,7 +79,7 @@ class MigrateCommand extends \WP_CLI_Command {
 
 			$postID = wp_insert_post([
 				'post_title'   => $row->title,
-				'post_content' => $row->fulltext/*,
+				'post_content' => 'asdasda'/*,
 				'post_excerpt' => $row->introtext,
 				'post_type'    => $postType,
 				'post_name'    => substr($row->alias, 0, 200),
