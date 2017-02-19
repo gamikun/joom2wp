@@ -7,6 +7,8 @@ from datetime import datetime
 import subprocess
 import requests
 import os
+import StringIO
+import csv
 
 
 parser = ArgumentParser()
@@ -61,8 +63,7 @@ raw_cats = subprocess.check_output([
     '--fields=slug,term_id,name,term_taxonomy_id'
 ])
 
-for catfull in raw_cats.split():
-    cat = catfull.split(',')
+for cat in csv.reader(StringIO.StringIO(raw_cats)):
     slug, cid, name, tx_id = cat
     wp_cats[slug] = (cid, name, tx_id, )
 
