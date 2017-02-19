@@ -88,6 +88,7 @@ class MigrateCommand extends \WP_CLI_Command {
 				'post_category'=> [$catID]*/
 			], true);
 
+			var_dump(mysqli_error());
 			var_dump($postID);
 
 			$md5ID = md5($row->id);
