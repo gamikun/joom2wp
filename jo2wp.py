@@ -140,11 +140,11 @@ if not args.do_revert:
             +   ' --post_date="{:%Y-%m-%d %H:%M:%S}"' \
             +   ' --porcelain')
             .format(
-                title.replace('"', r'\"'),
-                content.replace('"', '\\\\"'),
+                title.replace('"', r'\\"'),
+                content.replace('"', r'\\"'),
                 excerpt,
                 args.post_type,
-                slug[:200].replace('"', r'\"'),
+                slug[:200].replace('"', r'\\"'),
                 created,
             )
         , shell=True))
