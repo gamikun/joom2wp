@@ -24,7 +24,7 @@ parser.add_argument('--db-pwd', help='Password', required=True,
                     dest='db_password')
 parser.add_argument('--db-prefix', help='Tables prefixes',
                     required=True, dest='table_prefix',
-                    default='jo_'
+                    default='jo_')
 parser.add_argument('-p', help='Post type to be inserted',
                     dest='post_type', default='post')
 parser.add_argument('-u', help='Joomla URL', dest='joomla_url', default=None)
