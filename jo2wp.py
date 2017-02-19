@@ -40,18 +40,13 @@ parser.add_argument('-t', help='Replace taxonomy',
 
 args = parser.parse_args()
 
-source_prefix = args.table_prefix[0]
-k2_prefix = args.table_prefix[0]
-source = connect(host=args.db_host[0],
-		 user=args.db_user[0],
-		 db=args.db_name[0],
-		 passwd=args.db_password[0]
+
+k2_prefix = args.table_prefix
+source = connect(host=args.db_host,
+		 user=args.db_user,
+		 db=args.db_name,
+		 passwd=args.db_password
 		 )
-target = connect(host=args.db_host[1],
-                 user=args.db_user[1],
-                 db=args.db_name[1],
-                 passwd=args.db_password[1]
-                 )
 
 images_path = '/var/www/the-emag/wp-content/uploads/migrated'
 
