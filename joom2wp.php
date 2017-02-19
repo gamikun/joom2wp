@@ -3,12 +3,13 @@
 namespace edesarrollos\joom2wp;
 
 use WP_CLI;
+use WP_CLI\Utils;
 
 class MigrateCommand extends \WP_CLI_Command {
 
 	public function migrate($args=[], $assoc_args=[], $verbose=true) {
 
-		$this->assoc_args = wp_parse_args(
+		$allArgs = wp_parse_args(
 			$assoc_args,
 			[
 				'db_host'  => 'localhost',
@@ -19,7 +20,9 @@ class MigrateCommand extends \WP_CLI_Command {
 			]
 		);
 
-		$tablePrefix = $assoc_args['table_prefix'];
+		$postType = $allArgs['post_type'];
+		$tablePrefix = $allArgs['table_prefix'];
+		$joomlaURL = $allArgs['joomla_url'];
 
 		$mysql = mysqli_connect(
 			$assoc_args['db_host'],
@@ -62,8 +65,23 @@ class MigrateCommand extends \WP_CLI_Command {
 	            on i.catid = c.id 
 		");
 
+		$mediaUtil = new \Media_Command;
+
 		while ($row = $result->fetch_object()) {
-			echo $row->id;
+			$md5ID = md5($row->id);
+			$imagenURL = "{$joomlaURL}/media/k2/items/cache/{$md5ID}_XL.jpg";
+			$postID = wp_insert_post([
+				'post_title'   => $row->title,
+				'post_content' => $row->fulltext,
+				'post_excerpt' => $row->introtext,
+				'post_type'    => $postType,
+				'post_name'    => substr($row->alias, 0, 200),
+				'post_date'    => $row->created
+			]);
+			
+			$mediaUtil->import([$imagenURL], [
+				'post_id' => $postID
+			]);
 		}
 	}
 
