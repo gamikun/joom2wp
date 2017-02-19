@@ -72,6 +72,8 @@ class MigrateCommand extends \WP_CLI_Command {
 		while ($row = $result->fetch_object()) {
 			$catID = wp_create_category($row->catname);
 
+			var_dump($catID);
+
 			$postID = wp_insert_post([
 				'post_title'   => $row->title,
 				'post_content' => $row->fulltext,
@@ -81,6 +83,8 @@ class MigrateCommand extends \WP_CLI_Command {
 				'post_date'    => $row->created,
 				'post_category'=> [$catID]
 			], true);
+
+			var_dump($postID);
 
 			$md5ID = md5($row->id);
 			$imagenURL = "{$joomlaURL}/media/k2/items/cache/{$md5ID}_XL.jpg";
