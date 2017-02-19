@@ -144,7 +144,7 @@ if not args.do_revert:
                 content.replace('"', r'\"'),
                 excerpt,
                 args.post_type,
-                created
+                created,
                 slug[:200].replace('"', r'\"'),
             )
         , shell=True))
