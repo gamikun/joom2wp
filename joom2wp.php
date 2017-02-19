@@ -65,7 +65,7 @@ class MigrateCommand extends \WP_CLI_Command {
                    i.`fulltext`, i.introtext, 
                    i.catid, c.alias, i.created,
                    c.name as catname,
-                   u.username,
+                   u.username, u.userID,
                    u.email, u.name as userFullName,
                    u.registerDate
             from {$tablePrefix}k2_items as i 
@@ -85,24 +85,9 @@ class MigrateCommand extends \WP_CLI_Command {
         while ($row = $result->fetch_object()) {
             $catID = wp_create_category($row->catname);
 
-            $user = get_user_by('user_login', utf8_encode($row->username));
-
-            if (!$user) {
-                $authorID = wp_insert_user([
-                    'user_login' => utf8_encode($row->username),
-                    'display_name' => utf8_encode($row->userFullName),
-                    'user_nicename' => utf8_encode($row->username),
-                    'user_email' => utf8_encode($row->email),
-                    'user_registered' => utf8_encode($row->registerDate)
-                ]);
-                WP_CLI::log("Registered user {$row->username}");
-            } else {
-                $authorID = $user->ID;
-            }
-
             var_dump($authorID);
 
-            $postID = wp_insert_post([
+            $postParams = [
                 'post_title'   => utf8_encode($row->title),
                 'post_content' => utf8_encode($row->fulltext),
                 'post_excerpt' => utf8_encode($row->introtext),
@@ -110,9 +95,29 @@ class MigrateCommand extends \WP_CLI_Command {
                 'post_name'    => utf8_encode(substr($row->alias, 0, 200)),
                 'post_date'    => $row->created,
                 'post_category'=> [$catID],
-                'post_status'  => 'publish',
-                'post_author'  => $authorID
-            ]);
+                'post_status'  => 'publish'
+            ];
+
+            if ($row->userID) {
+                $user = get_user_by('user_login', utf8_encode($row->username));
+
+                if (!$user) {
+                    $authorID = wp_insert_user([
+                        'user_login' => utf8_encode($row->username),
+                        'display_name' => utf8_encode($row->userFullName),
+                        'user_nicename' => utf8_encode($row->username),
+                        'user_email' => utf8_encode($row->email),
+                        'user_registered' => utf8_encode($row->registerDate)
+                    ]);
+                    WP_CLI::log("Registered user {$row->username}");
+                } else {
+                    $authorID = $user->ID;
+                }
+
+                $postParams['post_author']  => $authorID;
+            }
+
+            $postID = wp_insert_post($postParams);
 
             if ($postID) {
                 WP_CLI::log("Imported post {$postID}");
