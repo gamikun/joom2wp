@@ -88,7 +88,6 @@ class MigrateCommand extends \WP_CLI_Command {
             $user = get_user_by('user_login', $row->username);
 
             if (!$user) {
-                var_dump($row);
                 $authorID = wp_insert_user([
                     'user_login' => $row->username,
                     'display_name' => $row->userFullName,
@@ -100,6 +99,8 @@ class MigrateCommand extends \WP_CLI_Command {
             } else {
                 $authorID = $user->ID;
             }
+
+            var_dump($authorID);
 
             $postID = wp_insert_post([
                 'post_title'   => utf8_encode($row->title),
