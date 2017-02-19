@@ -14,9 +14,12 @@ class MigrateCommand extends \WP_CLI_Command {
 				'db_host'  => 'localhost',
 				'db_user'  => 'root',
 				'post_type'=> 'post',
-				'taxonomy' => 'category'
+				'taxonomy' => 'category',
+				'table_prefix' => 'jo_'
 			]
 		);
+
+		$tablePrefix = $assoc_args['table_prefix'];
 
 		$mysql = mysqli_connect(
 			$assoc_args['db_host'],
@@ -26,10 +29,45 @@ class MigrateCommand extends \WP_CLI_Command {
 		);
 
 		$categories = get_categories([
-			'taxonomy' => $assoc_args['taxonomy']
+			'taxonomy' => $assoc_args['taxonomy'],
+			'fields'   => ['slug', 'term_id',
+						   'name', 'term_taxonomy_id'
+						   ];
 		]);
 
-		var_dump($categories);
+		// WORDPRESS CATEGORIES
+
+		$wp_cats = [];
+
+		foreach ($cat in $categories) {
+			$wp_cats[$cat->term_id] = $cat;
+		}
+
+		// JOOMLA CATEGORIES
+		$cats = [];
+
+		$result = $mysql->query("
+			select id, alias, name
+			from {$tablePrefix}k2_categories
+		");
+
+		while ($row = $result->fetch_object()) {
+			$cats[$row->id] = $row;
+		}
+
+		// JOOMLA K2
+		$result = $mysql->query("
+	        select i.id, i.title, i.alias,
+	        	   i.`fulltext`, i.introtext,
+	        	   i.catid, c.alias, i.created
+	        from {$tablePrefix}k2_items as i
+	        inner join {tablePrefix}k2_categories as c
+	            on i.catid = c.id
+		");
+
+		while ($row = $result->fetch_object()) {
+			echo $row->id;
+		}
 	}
 
 }
