@@ -126,9 +126,8 @@ if not args.do_revert:
         elif catid in cats:
             cat_slug, cat_title = cats[catid]
             the_cat_id = insert_category(cat_title, cat_slug)
-            wp_cats[cat_slug] = (the_cat_id, cat_slug, the_tax_id, )
+            wp_cats[cat_slug] = (the_cat_id, cat_slug, )
         else:
-            the_tax_id = None
             the_cat_id = None
 
         post_id = int(subprocess.check_output([
@@ -146,17 +145,6 @@ if not args.do_revert:
         filename = md5id + '.jpg'
         image_url = '{}/media/k2/items/cache/{}_XL.jpg'.format(args.joomla_url, md5id)
 
-        if post_id and the_tax_id:
-            tcursor.execute("""
-                insert into {}term_relationships (
-                    object_id, term_taxonomy_id, term_order
-                )
-                values (
-                    %s, %s, 0
-                )
-                """.format(args.table_prefix[1]),
-                (post_id, the_tax_id, )
-            )
       
 
 else:
