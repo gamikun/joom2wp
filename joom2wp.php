@@ -85,15 +85,15 @@ class MigrateCommand extends \WP_CLI_Command {
         while ($row = $result->fetch_object()) {
             $catID = wp_create_category($row->catname);
 
-            $user = get_user_by('user_login', $row->username);
+            $user = get_user_by('user_login', utf8_encode($row->username));
 
             if (!$user) {
                 $authorID = wp_insert_user([
-                    'user_login' => $row->username,
-                    'display_name' => $row->userFullName,
-                    'user_nicename' => $row->username,
-                    'user_email' => $row->email,
-                    'user_registered' => $row->registerDate
+                    'user_login' => utf8_encode($row->username),
+                    'display_name' => utf8_encode($row->userFullName),
+                    'user_nicename' => utf8_encode($row->username),
+                    'user_email' => utf8_encode($row->email),
+                    'user_registered' => utf8_encode($row->registerDate)
                 ]);
                 WP_CLI::log("Registered user {$row->username}");
             } else {
