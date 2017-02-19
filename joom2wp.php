@@ -2,6 +2,8 @@
 
 namespace edesarrollos\joom2wp;
 
+define( 'WP_DEBUG_LOG', true );
+
 use WP_CLI;
 use WP_CLI\Utils;
 
@@ -85,6 +87,8 @@ class MigrateCommand extends \WP_CLI_Command {
 			], true);
 
 			var_dump($postID);
+
+			var_dump(mysqli_error())
 
 			$md5ID = md5($row->id);
 			$imagenURL = "{$joomlaURL}/media/k2/items/cache/{$md5ID}_XL.jpg";
