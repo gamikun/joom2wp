@@ -60,7 +60,8 @@ class MigrateCommand extends \WP_CLI_Command {
 		$result = $mysql->query("
 	        select i.id, i.title, i.alias, 
 	        	   i.`fulltext`, i.introtext, 
-	        	   i.catid, c.alias, i.created 
+	        	   i.catid, c.alias, i.created,
+	        	   c.name as catname
 	        from {$tablePrefix}k2_items as i 
 	        inner join {$tablePrefix}k2_categories as c 
 	            on i.catid = c.id 
@@ -69,22 +70,7 @@ class MigrateCommand extends \WP_CLI_Command {
 		$mediaUtil = new \Media_Command;
 
 		while ($row = $result->fetch_object()) {
-			if (!isset($wp_cats[$row->alias])) {
-				if (isset($cats[$row->catid])) {
-					$cat = $cats[$row->catid];
-					$catID = wp_insert_category([
-						'category_nicename' => $cat->alias,
-						'cat_name' => $cat->name,
-						'taxonomy' => $taxonomy
-					], true);
-					var_dump($catID);
-					echo "Inserted category: {$catID}\n";
-				}
-			} else {
-				$catID = $wp_cats[$row->alias]->term_id;
-			}
-
-			var_dump($row);
+			$catID = wp_create_category($row->catname);
 
 			$postID = wp_insert_post([
 				'post_title'   => $row->title,
@@ -93,7 +79,7 @@ class MigrateCommand extends \WP_CLI_Command {
 				'post_type'    => $postType,
 				'post_name'    => substr($row->alias, 0, 200),
 				'post_date'    => $row->created,
-				'post_category'=> [$row->alias]
+				'post_category'=> [$catID]
 			], true);
 
 			$md5ID = md5($row->id);
