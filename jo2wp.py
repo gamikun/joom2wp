@@ -34,7 +34,7 @@ parser.add_argument('--revert', help='Do a database revert with the inserted pos
                     action='store_const', const=True, dest='do_revert')
 parser.add_argument('-t', help='Replace taxonomy',
                     dest='category_taxonomy',
-                    default=None,
+                    default='category',
                     type=str
                     )
 
@@ -60,9 +60,7 @@ tcursor = target.cursor()
 
 """ Wordpress categories """
 wp_cats = {}
-cat_taxonomy = args.category_taxonomy \
-            if args.category_taxonomy \
-            else 'category'
+cat_taxonomy = args.category_taxonomy
 raw_cats = subprocess.check_output([
     'wp', 'term', 'list', cat_taxonomy,
     '--format=csv',
