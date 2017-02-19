@@ -133,22 +133,19 @@ if not args.do_revert:
         delta = created - datetime.fromtimestamp(0)
         timestmap = int(delta.total_seconds())
 
-        post_id = int(subprocess.check_output("""
-            wp post create\ 
-            --post_title="{}" \
-            --post_name="{}" \
-            --post_content="{}" \
-            --post_excerpt="{}" \
-            --post_type="{}" \
-            --post_date="{:%Y-%m-%d %H:%M:%S}" \
-            --porcelain
-            """.format(
+        post_id = int(subprocess.check_output(
+            (r'wp post create --post_title="{}"' \
+            +   r' --post_content="{}" --post_excerpt="{}"' \
+            +   r' --post_type="{}" --post_name="{}"' \
+            +   r' --post_date="{:%Y-%m-%d %H:%M:%S}"' \
+            +   r' --porcelain')
+            .format(
                 title.replace('"', r'\"'),
-                slug[:200].replace('"', r'\"'),
                 content.replace('"', r'\"'),
                 excerpt,
                 args.post_type,
                 created
+                slug[:200].replace('"', r'\"'),
             )
         , shell=True))
 
