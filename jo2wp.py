@@ -12,7 +12,7 @@ import os
 parser = ArgumentParser()
 parser.add_argument('--db-host', help='Source database',
                     dest='db_host', nargs=2,
-                    default=['localhost', 'localhost'])
+                    default='localhost')
 parser.add_argument('--db-user', help='Database user',
                     dest='db_user',
                     default=['root', 'root'])
