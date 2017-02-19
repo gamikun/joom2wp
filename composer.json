@@ -1,0 +1,22 @@
+{
+    "name": "edesarrollos/joom2wp",
+    "description": "A set of tools to migrate from joomla to wordpress",
+    "type": "wp-cli-package",
+    "homepage": "https://github.com/gamikun/joom2wp",
+    "support": {
+        "issues": "https://github.com/gamikun/joom2wp/issues"
+    },
+    "require": {
+        
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Gamaliel Espinoza Macedo",
+            "email": "gamaliel.espinoza@gmail.com"
+        }
+    ],
+    "autoload": {
+        "files": [ "joom2wp.php" ]
+    }
+}
