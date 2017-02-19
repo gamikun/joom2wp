@@ -23,16 +23,17 @@ class MigrateCommand extends \WP_CLI_Command {
 		$postType = $allArgs['post_type'];
 		$tablePrefix = $allArgs['table_prefix'];
 		$joomlaURL = $allArgs['joomla_url'];
+		$taxonomy = $allArgs['taxonomy'];
 
 		$mysql = mysqli_connect(
-			$assoc_args['db_host'],
-			$assoc_args['db_user'],
-			$assoc_args['db_pwd'],
-			$assoc_args['db_name']
+			$allArgs['db_host'],
+			$allArgs['db_user'],
+			$allArgs['db_pwd'],
+			$allArgs['db_name']
 		);
 
 		$categories = get_categories([
-			'taxonomy' => $assoc_args['taxonomy']
+			'taxonomy' => $taxonomy
 		]);
 
 		// WORDPRESS CATEGORIES
@@ -68,9 +69,9 @@ class MigrateCommand extends \WP_CLI_Command {
 		$mediaUtil = new \Media_Command;
 
 		while ($row = $result->fetch_object()) {
-			$md5ID = md5($row->id);
-
-			$imagenURL = "{$joomlaURL}/media/k2/items/cache/{$md5ID}_XL.jpg";
+			if (isset($wp_cats[$row->alias])) {
+				
+			}
 
 			$postID = wp_insert_post([
 				'post_title'   => $row->title,
@@ -82,6 +83,9 @@ class MigrateCommand extends \WP_CLI_Command {
 			]);
 
 			echo 'fuck' . $postID;
+
+			$md5ID = md5($row->id);
+			$imagenURL = "{$joomlaURL}/media/k2/items/cache/{$md5ID}_XL.jpg";
 
 			$mediaID = $mediaUtil->import([$imagenURL], [
 				'post_id' => $postID,
