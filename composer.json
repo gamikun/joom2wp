@@ -1,5 +1,5 @@
 {
-    "name": "edesarrollos/joom2wp",
+    "name": "gamikun/joom2wp",
     "description": "A set of tools to migrate from joomla to wordpress",
     "type": "wp-cli-package",
     "homepage": "https://github.com/gamikun/joom2wp",
