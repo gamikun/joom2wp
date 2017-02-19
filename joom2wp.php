@@ -96,7 +96,7 @@ class MigrateCommand extends \WP_CLI_Command {
             ];
 
             if ($row->userID) {
-                $user = get_user_by('user_login', utf8_encode($row->username));
+                $user = get_user_by('login', utf8_encode($row->username));
 
                 if (!$user) {
                     $authorID = wp_insert_user([
