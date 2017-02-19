@@ -114,7 +114,7 @@ class MigrateCommand extends \WP_CLI_Command {
                     $authorID = $user->ID;
                 }
 
-                $postParams['post_author']  => $authorID;
+                $postParams['post_author'] = $authorID;
             }
 
             $postID = wp_insert_post($postParams);
