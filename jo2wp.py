@@ -133,21 +133,15 @@ if not args.do_revert:
         delta = created - datetime.fromtimestamp(0)
         timestmap = int(delta.total_seconds())
 
-        post_id = int(subprocess.check_output(
-            ('wp post create --post_title="{}"' \
-            +   ' --post_content="{}" --post_excerpt="{}"' \
-            +   ' --post_type="{}" --post_name="{}"' \
-            +   ' --post_date="{:%Y-%m-%d %H:%M:%S}"' \
-            +   ' --porcelain')
-            .format(
-                title.replace('"', r'\\"'),
-                content.replace('"', r'\\"'),
-                excerpt,
-                args.post_type,
-                slug[:200].replace('"', r'\\"'),
-                created,
-            )
-        , shell=True))
+        post_id = int(subprocess.check_output([
+            'wp', 'post', 'create', '--post_title="{}"',
+            '--post_content="{}"'.format(title.replace('"', r'\\"')),
+            '--post_excerpt="{}"'.format(content.replace('"', r'\\"')),
+            '--post_type="{}"'.format(excerpt.replace('"', r'\\"')),
+            '--post_name="{}"'.format(slug[:200].replace('"', r'\\"')),
+            '--post_date="{:%Y-%m-%d %H:%M:%S}"'.format(created),
+            '--porcelain'
+        ], shell=True))
 
         md5id = md5("Image" + str(theid)).hexdigest()
         filename = md5id + '.jpg'
