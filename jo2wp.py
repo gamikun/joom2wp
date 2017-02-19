@@ -24,7 +24,7 @@ parser.add_argument('--db-pwd', help='Password', required=True,
                     dest='db_password')
 parser.add_argument('--db-prefix', help='Tables prefixes',
                     required=True, dest='table_prefix',
-                    default=('jo_', 'wp_'))
+                    default='jo_'
 parser.add_argument('-p', help='Post type to be inserted',
                     dest='post_type', default='post')
 parser.add_argument('-u', help='Joomla URL', dest='joomla_url', default=None)
@@ -72,7 +72,7 @@ for cat in csv.reader(StringIO.StringIO(raw_cats)):
 cats = {}
 scursor.execute(
     "select id, alias, name from {}k2_categories"\
-        .format(source_prefix)
+        .format(args.source_prefix)
 )
 for cat in scursor:
     cid, alias, title = cat
