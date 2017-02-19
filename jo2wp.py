@@ -134,11 +134,12 @@ if not args.do_revert:
         timestmap = int(delta.total_seconds())
 
         post_id = int(subprocess.check_output([
-            'wp', 'post', 'create', '--post_title="{}"',
-            '--post_content="{}"'.format(title.replace('"', r'\\"')),
-            '--post_excerpt="{}"'.format(content.replace('"', r'\\"')),
-            '--post_type="{}"'.format(excerpt.replace('"', r'\\"')),
-            '--post_name="{}"'.format(slug[:200].replace('"', r'\\"')),
+            'wp', 'post', 'create',
+            '--post_title="{}"'.format(title.replace('"', r'\"')),
+            '--post_content="{}"'.format(content.replace('"', r'\"')),
+            '--post_excerpt="{}"'.format(excerpt.replace('"', r'\"')),
+            '--post_type="{}"'.format(args.post_type),
+            '--post_name="{}"'.format(slug[:200].replace('"', r'\"')),
             '--post_date="{:%Y-%m-%d %H:%M:%S}"'.format(created),
             '--porcelain'
         ], shell=True))
