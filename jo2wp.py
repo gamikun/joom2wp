@@ -125,7 +125,7 @@ if not args.do_revert:
             the_cat_id, _, the_tax_id  = wp_cats[catslug]
         elif catid in cats:
             cat_slug, cat_title = cats[catid]
-            the_cat_id, the_tax_id = insert_category(cat_title, cat_slug)
+            the_cat_id = insert_category(cat_title, cat_slug)
             wp_cats[cat_slug] = (the_cat_id, cat_slug, the_tax_id, )
         else:
             the_tax_id = None
@@ -146,8 +146,6 @@ if not args.do_revert:
         filename = md5id + '.jpg'
         image_url = '{}/media/k2/items/cache/{}_XL.jpg'.format(args.joomla_url, md5id)
 
-
-
         if post_id and the_tax_id:
             tcursor.execute("""
                 insert into {}term_relationships (
@@ -159,24 +157,7 @@ if not args.do_revert:
                 """.format(args.table_prefix[1]),
                 (post_id, the_tax_id, )
             )
-
-        if post_id and media_id:
-            tcursor.execute("""
-                update {}posts
-                set post_parent = %s
-                where id = %s
-                """.format(args.table_prefix[1]),
-
-                (post_id, media_id, )
-            )
-            tcursor.execute("""
-                insert into {}postmeta (
-                    post_id, meta_key, meta_value
-                )
-                values (%s, '_thumbnail_id', %s)
-                """.format(args.table_prefix[1]),
-                (post_id, media_id, )
-            )       
+      
 
 else:
     tcursor.execute("""
