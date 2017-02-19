@@ -64,16 +64,36 @@ class MigrateCommand extends \WP_CLI_Command {
             select i.id, i.title, i.alias, 
                    i.`fulltext`, i.introtext, 
                    i.catid, c.alias, i.created,
-                   c.name as catname
+                   c.name as catname,
+                   u.username, u.id as userID,
+                   c.email, u.name as userFullName,
+                   u.registerDate
             from {$tablePrefix}k2_items as i 
             inner join {$tablePrefix}k2_categories as c 
-                on i.catid = c.id 
+                on i.catid = c.id
+            left join {$tablePrefix}_users as u
+                on i.created_by = u.id
         ");
 
         $mediaUtil = new \Media_Command;
 
         while ($row = $result->fetch_object()) {
             $catID = wp_create_category($row->catname);
+
+            $user = get_user_by('user_login', $row->username);
+
+            if (!$user) {
+                $authorID = wp_insert_user([
+                    'user_login' => $row->username,
+                    'display_name' => $row->userFullName,
+                    'user_nicename' => $row->username,
+                    'user_email' => $row->email,
+                    'user_registered' => $row->registerDate
+                ]);
+                WP_CLI::log("Registered user {$row->username}");
+            } else {
+                $authorID = $user->ID;
+            }
 
             $postID = wp_insert_post([
                 'post_title'   => utf8_encode($row->title),
@@ -83,7 +103,8 @@ class MigrateCommand extends \WP_CLI_Command {
                 'post_name'    => utf8_encode(substr($row->alias, 0, 200)),
                 'post_date'    => $row->created,
                 'post_category'=> [$catID],
-                'post_status'  => 'publish'
+                'post_status'  => 'publish',
+                'post_author'  => $authorID
             ]);
 
             if ($postID) {
