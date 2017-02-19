@@ -14,7 +14,7 @@ parser.add_argument('--db-host', help='Source database',
                     dest='db_host', nargs=2,
                     default=['localhost', 'localhost'])
 parser.add_argument('--db-user', help='Database user',
-                    dest='db_user', nargs=2,
+                    dest='db_user',
                     default=['root', 'root'])
 parser.add_argument('--db-name', help='Database name',
                     required=True, dest='db_name')
