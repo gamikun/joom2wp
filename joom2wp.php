@@ -67,7 +67,7 @@ class MigrateCommand extends \WP_CLI_Command {
                    c.name as catname,
                    u.username, u.id as userID,
                    u.email, u.name as userFullName,
-                   u.registerDate
+                   u.registerDate, i.hits
             from {$tablePrefix}k2_items as i 
             inner join {$tablePrefix}k2_categories as c 
                 on i.catid = c.id
@@ -84,9 +84,13 @@ class MigrateCommand extends \WP_CLI_Command {
         while ($row = $result->fetch_object()) {
             $catID = wp_create_category($row->catname);
 
+            $content = $row->fulltext
+                     ? $row->fulltext
+                     : $row->introtext;
+
             $postParams = [
                 'post_title'   => utf8_encode($row->title),
-                'post_content' => utf8_encode($row->fulltext),
+                'post_content' => $content,
                 'post_excerpt' => utf8_encode($row->introtext),
                 'post_type'    => $postType,
                 'post_name'    => utf8_encode(substr($row->alias, 0, 200)),
@@ -118,6 +122,16 @@ class MigrateCommand extends \WP_CLI_Command {
 
             if ($postID) {
                 WP_CLI::log("Imported post {$postID}");
+
+                $wpdb->insert($wpdb->prefix . 'post_views',
+                    [
+                        'id' => $postID,
+                        'type' => 4,
+                        'period' => 'total',
+                        'count' => $row->hits
+                    ],
+                    ['%d', '%d', '%s', '%d']
+                );
 
                 $md5ID = md5("Image" . $row->id);
                 $imagenURL = "{$joomlaURL}/media/k2/items/cache/{$md5ID}_XL.jpg";
